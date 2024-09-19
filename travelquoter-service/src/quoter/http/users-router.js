@@ -9,55 +9,82 @@ function createUsersRouter(manageUsersUsecase) {
 
   const router = express.Router();
 
-  router.get("/users", async (req, res) => {
+  router.get("/users", async (req, res, next) => {
 
-    const users = await manageUsersUsecase.getUsers();
-    res.status(200).send(users);
+    try{
 
-  });
+      const users = await manageUsersUsecase.getUsers();
+      res.status(200).send(users);
 
-  router.get("/users/:id", async (req, res) => {
-
-    const id = req.params.id;
-    const user = await manageUsersUsecase.getUser(id);
-
-    res.status(200).send(user);
+    } catch (error) {
+      next(error);
+    }   
 
   });
 
-  router.post("/users", async (req, res) => {
+  router.get("/users/:id", async (req, res, next) => {
 
-    validation = validateSchema(User.schema, req);
+    try{
 
-    if (validation === true) {
-      const user = await manageUsersUsecase.createUser(req.body);
-      res.status(200).send(user);
-    } else {
-      res.status(422).send(validation);
-    }
-
-  });
-
-  router.put("/users/:id", async (req, res) => {
-
-    validation = validateSchema(User.schema, req);
-
-    if(validation === true) {
       const id = req.params.id;
-      const user = await manageUsersUsecase.updateUser(id, req.body);
+      const user = await manageUsersUsecase.getUser(id);
       res.status(200).send(user);
-    } else {
-      res.status(422).send(validation);
-    }
+
+    } catch (error) {
+      next(error);
+    }   
 
   });
 
-  router.delete("/users/:id", async (req, res) => {
+  router.post("/users", async (req, res, next) => {
 
-    const id = req.params.id;
-    await manageUsersUsecase.deleteUser(id);
+    try{
+      validation = validateSchema(User.schemaCreate, req);
 
-    res.status(200).send(`Deleted ${id}`);
+      if (validation === true) {
+        const user = await manageUsersUsecase.createUser(req.body);
+        res.status(200).send(user);
+      } else {
+        res.status(422).send(validation);
+      }
+
+    } catch (error) {
+      next(error);
+    }   
+
+  });
+
+  router.put("/users/:id", async (req, res, next) => {
+
+    try{
+      validation = validateSchema(User.schemaUpdate, req);
+
+      if(validation === true) {
+        const id = req.params.id;
+        const user = await manageUsersUsecase.updateUser(id, req.body);
+        res.status(200).send(user);
+      } else {
+        res.status(422).send(validation);
+      }
+
+    } catch (error) {
+      next(error);
+    }   
+
+  });
+
+  router.delete("/users/:id", async (req, res, next) => {
+
+    try{
+
+      const id = req.params.id;
+      await manageUsersUsecase.deleteUser(id);
+
+      res.status(200).send(`Deleted ${id}`);
+
+    } catch (error) {
+      next(error);
+    }   
 
   });
 

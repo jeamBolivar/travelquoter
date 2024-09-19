@@ -1,4 +1,6 @@
 const express = require('express');
+const requestMiddleware = require('../../quoter/middleware/request-middleware');
+const erroHandler = require('../../quoter/utils/error-handler-util');
 
 async function createExpressApp(routers) {
 
@@ -11,8 +13,14 @@ async function createExpressApp(routers) {
   // Usar rutas recibidas.
 
   for (let router of routers) {
-    app.use(router);
+    if (router.protect) {
+      app.use(router.path, requestMiddleware.protectRoute, router.router);
+    } else {
+      app.use(router.path, router.router);
+    }       
   }
+
+  app.use(erroHandler.errorHandler);
 
   // Dejar escuchando y finalizar.
 

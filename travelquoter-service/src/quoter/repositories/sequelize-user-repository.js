@@ -26,7 +26,9 @@ class SequelizeUsersRepository {
 
       name: DataTypes.STRING,
       lastname: DataTypes.STRING,
-      age: DataTypes.INTEGER
+      age: DataTypes.INTEGER,
+      username: DataTypes.STRING,
+      password: DataTypes.STRING
 
     };
 
@@ -105,6 +107,19 @@ class SequelizeUsersRepository {
       await this.userModel.drop();
     }
 
+  }
+
+  async validateLogin(username, password) {
+
+    const options = {
+      where: {
+        username: username,
+        password: password
+      }
+    }
+    const user = await this.userModel.findOne(options);
+    return user;
+    
   }
 
 }
