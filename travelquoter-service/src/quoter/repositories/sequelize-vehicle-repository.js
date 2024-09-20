@@ -5,10 +5,11 @@ const { DataTypes } = require('sequelize');
 
 class SequelizeVehiclesRepository {
 
-  constructor(sequelizeClient, test = false) {
+  constructor(sequelizeClient, test = false, sequelizeCategoriesRepository) {
 
-    this.sequelizeClient = sequelizeClient;
+    this.sequelizeClient = sequelizeClient;    
     this.test = test;
+    this.sequelizeCategoriesRepository = sequelizeCategoriesRepository;
 
     let tableName = "Vehicles";
 
@@ -34,23 +35,59 @@ class SequelizeVehiclesRepository {
       timestamps: false,
     };
 
-    this.vehicleModel = sequelizeClient.sequelize.define('Vehicle', columns, options);
+    this.vehicleModel = sequelizeClient.sequelize.define('Vehicle', columns, options);    
 
   }
 
   async getVehicles() {
 
     const vehicles = await this.vehicleModel.findAll({
-      raw: true
+      include: {
+        model: this.sequelizeCategoriesRepository.categoryModel,
+        as: 'Seats',
+        through: { attributes: ['capacity'] }
+      }
     });
 
-    return vehicles;
+    return vehicles.map(vehicle => {
+      const seats = vehicle.Seats.map(seat => ({
+          id: seat.id,
+          name: seat.name,
+          capacity: seat.VehicleCategory.capacity
+      }));
+
+      return {
+          id: vehicle.id,
+          name: vehicle.name,
+          identifier: vehicle.identifier,
+          Seats: seats
+      };
+    });
 
   }
 
   async getVehicle(id) {
     
-    return await this.vehicleModel.findByPk(id);
+    const vehicle = await this.vehicleModel.findByPk(id, {
+      include: {
+        model: this.sequelizeCategoriesRepository.categoryModel,
+        as: 'Seats',
+        through: { attributes: ['capacity'] }
+      }
+    });
+
+    const seats = vehicle.Seats.map(seat => ({
+      id: seat.id,
+      name: seat.name,
+      capacity: seat.VehicleCategory.capacity
+    }));
+
+    return {
+        id: vehicle.id,
+        name: vehicle.name,
+        identifier: vehicle.identifier,
+        Seats: seats
+    };  
 
   }
 

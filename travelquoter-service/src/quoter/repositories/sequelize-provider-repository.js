@@ -5,10 +5,11 @@ const { DataTypes } = require('sequelize');
 
 class SequelizeProvidersRepository {
 
-  constructor(sequelizeClient, test = false) {
+  constructor(sequelizeClient, test = false, sequelizeVehiclesRepository) {
 
     this.sequelizeClient = sequelizeClient;
     this.test = test;
+    this.sequelizeVehiclesRepository = sequelizeVehiclesRepository
 
     let tableName = "Providers";
 
@@ -34,13 +35,18 @@ class SequelizeProvidersRepository {
     };
 
     this.providerModel = sequelizeClient.sequelize.define('Provider', columns, options);
+    // this.providerModel.hasMany()
 
   }
 
   async getProviders() {
 
-    const providers = await this.providerModel.findAll({
-      raw: true
+    const providers = await this.providerModel.findAll({      
+      include: {
+        model: this.sequelizeVehiclesRepository.vehicleModel,
+        as: 'Vehicles',
+        through: { attributes: [] }
+      }
     });
 
     return providers;
@@ -49,7 +55,13 @@ class SequelizeProvidersRepository {
 
   async getProvider(id) {
     
-    return await this.providerModel.findByPk(id);
+    return await this.providerModel.findByPk(id,{
+      include: {
+        model: this.sequelizeVehiclesRepository.vehicleModel,
+        as: 'Vehicles',
+        through: { attributes: [] }
+      }
+    });
 
   }
 

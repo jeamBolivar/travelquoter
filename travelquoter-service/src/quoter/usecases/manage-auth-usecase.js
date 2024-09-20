@@ -13,7 +13,7 @@ class ManageAuthUsecase {
   async login(data) {
 
     const encryption = new Encryption();
-    const password = encryption.rijndaelEncryptString(data.password);
+    const password = encryption.rijndaelEncryptString(data.password);    
 
     const user = await this.usersRepository.validateLogin(data.username, password); 
     
@@ -21,7 +21,7 @@ class ManageAuthUsecase {
       const token = jwtUtils.generateToken({id: user.id, username: user.username});
       return {token: token};
     }else {
-      throw new Error('Invalid credentials')      
+      throw new Error('Invalid credentials');
     }   
 
   }

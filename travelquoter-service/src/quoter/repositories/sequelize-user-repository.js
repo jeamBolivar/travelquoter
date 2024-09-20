@@ -122,6 +122,16 @@ class SequelizeUsersRepository {
     
   }
 
+  async getUserByUsername(username) {
+    const options = {
+      where: {
+        username: username
+      }
+    }
+    const user = await this.userModel.findOne(options);
+    return user;
+  }
+
 }
 
 module.exports = SequelizeUsersRepository;

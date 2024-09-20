@@ -1,4 +1,4 @@
-//Entidad usuario.
+//Entidad autenticador.
 
 class Auth {
   

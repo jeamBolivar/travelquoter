@@ -5,9 +5,11 @@ const { DataTypes } = require('sequelize');
 
 class SequelizeVehicleCategoriesRepository {
 
-  constructor(sequelizeClient, test = false) {
+  constructor(sequelizeClient, test = false, sequelizeVehiclesRepository, sequelizeCategoriesRepository) {
 
     this.sequelizeClient = sequelizeClient;
+    this.sequelizeVehiclesRepository = sequelizeVehiclesRepository;
+    this.sequelizeCategoriesRepository = sequelizeCategoriesRepository;
     this.test = test;
 
     let tableName = "VehicleCategories";
@@ -18,7 +20,7 @@ class SequelizeVehicleCategoriesRepository {
 
     const columns = {
 
-      vehicleId: {
+      VehicleId: {
         type: DataTypes.INTEGER,
         primaryKey : true,
         references: {
@@ -26,7 +28,7 @@ class SequelizeVehicleCategoriesRepository {
           key: 'id',
         }
       },
-      categoryId: {
+      CategoryId: {
         type: DataTypes.INTEGER,
         primaryKey : true,
         references: {
@@ -45,6 +47,8 @@ class SequelizeVehicleCategoriesRepository {
     };
 
     this.vehicleCategoryModel  = sequelizeClient.sequelize.define('VehicleCategory', columns, options);
+    this.sequelizeVehiclesRepository.vehicleModel.belongsToMany(this.sequelizeCategoriesRepository.categoryModel, { through: this.vehicleCategoryModel, as: 'Seats' });
+    this.sequelizeCategoriesRepository.categoryModel.belongsToMany(this.sequelizeVehiclesRepository.vehicleModel, { through: this.vehicleCategoryModel, as: 'Vehicles' });
 
   }
 

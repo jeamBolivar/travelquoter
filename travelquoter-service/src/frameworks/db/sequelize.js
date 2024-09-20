@@ -1,5 +1,4 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
 
 // Conexión a una base de datos SQL por medio del ORM 
 // Es agnóstico a la base de datos misma (MySQL, Postgres, etc).
@@ -13,8 +12,7 @@ class SequelizeClient {
     const dialect = process.env.SEQUELIZE_DIALECT;
     const username = process.env.SEQUELIZE_USERNAME;
     const password = process.env.SEQUELIZE_PASSWORD;
-    const database = process.env.SEQUELIZE_DATABASE;
-    console.log(dialect)
+    const database = process.env.SEQUELIZE_DATABASE;    
 
     // Obtener el host o el socket. Sólo se usa uno de los dos para la conexión.
     // El socket es útil para conectarse con una base de datos en GCP.
@@ -47,7 +45,15 @@ class SequelizeClient {
       alter: false,
     };
 
-    this.sequelize.sync(syncOptions)
+    this.sequelize.sync(syncOptions).then(db => {
+      this.sequelize.models.User.create({
+        name: 'Jean',
+        lastname: 'Añazco',
+        age: 30,
+        username: 'jeanMB',
+        password: '6FD2UpdVYSEcjKoH7lGdb+B0VFSqYt1ZQuZecvTtwkk='
+      })
+    })
       .catch(error => {
         console.log("Couldn't sync database", error);
       });
