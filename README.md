@@ -6,7 +6,7 @@ El presente proyecto simula una aplicación de cotización de viajes, teniendo g
 
 Este microservicio fue desarrollado en NodeJS usando Express, Sequelize y MySQL.
 
-Para poder probar los endpoints de la app, una vez iniciada en docker, puedes importar el POSTMAN el archivo **TRAVEL-QUOTER.postman_collection.json**
+Para poder probar los endpoints de la app, una vez iniciada en docker, puedes importar en POSTMAN el archivo **TRAVEL-QUOTER.postman_collection.json**
 
 Todos los endpoints tienen seguridad jwt, para poder acceder a ellos es necesario primero logearte con el endpoint **auth/login** con las credenciales **"username": "jeanMB"**, **"password": "123456"**(usuario creado por defecto al iniciar la base de datos).
 
