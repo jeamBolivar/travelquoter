@@ -1,7 +1,7 @@
 const express = require('express');
 const appRoot = require('app-root-path');
 const Quotation = require('../entities/quotation');
-const validateSchema = require(appRoot + "/frameworks/http/ajv");
+const validateSchema = require(appRoot + "/src/frameworks/http/ajv");
 
 // Router (endpoints) para la sección de cotizaciones.
 

@@ -1,8 +1,7 @@
 const express = require('express');
 const appRoot = require('app-root-path');
 const Auth = require('../entities/auth');
-const validateSchema = require(appRoot + "/frameworks/http/ajv");
-
+const validateSchema = require(appRoot + "/src/frameworks/http/ajv");
 // Router (endpoints) para la sección de autenticación.
 
 function createAuthRouter(manageAuthUsecase) {
