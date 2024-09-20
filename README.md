@@ -20,9 +20,9 @@ Todos los endpoints tienen seguridad jwt, para poder acceder a ellos es necesari
 ## Instalación y ejecución
 
 - Clona el proyecto.
-- Copia el contenido de **.env** (que está en la raiz del proyecto) to **.env** (que esta en Docker/app).
+- Copia el contenido de **.env** (que está en la carpeta **travelquoter**) a **.env** (que esta en la carpeta **travelquoter/travelquoter-service/Docker/app**).
 
-Ejecuta el comando ```docker-compose``` dentro de **la carpeta donde descargaste tu prooyecto**.
+Ejecuta el comando ```docker-compose``` dentro de la carpeta **travelquoter**.
 
 * Construye los contenedores: ```docker-compose build```
 
@@ -37,7 +37,7 @@ Revisa el archivo **.env** por si quieres cambiar algun parametro.
 
 #### Nota
 
-La aplicación de NodeJS probablemente lanzará una excepción la primera vez, esto porque intentará conectarse al servicio MySQL pero este aun esta inicializandose, si esto ocurre espera a que el servicio de MySQL este completamente inicializado y ejecuta el comando `docker-compose restart $NAME_SERVICE` en otra terminal para reiniciar el servicio de la aplicación NodeJS.
+La aplicación de NodeJS probablemente lanzará una excepción la primera vez, esto porque intentará conectarse al servicio MySQL pero este aun esta inicializandose, si esto ocurre espera a que el servicio de MySQL este completamente inicializado y ejecuta el comando `docker-compose restart $QUOTER_SERVICE_NAME` en otra terminal para reiniciar el servicio de la aplicación NodeJS.
 
 ### Autores ✒️
 
